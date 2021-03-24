@@ -1,0 +1,10 @@
+[gd_resource type="SpatialMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://Textures/Terrain/lightmap.bmp" type="Texture" id=1]
+
+[resource]
+flags_transparent = true
+params_specular_mode = 4
+params_use_alpha_scissor = true
+params_alpha_scissor_threshold = 0.68
+albedo_texture = ExtResource( 1 )
