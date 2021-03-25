@@ -48,8 +48,8 @@ func _ready():
 	$MeshInstance.mesh = tmpMesh
 	var shape = ConcavePolygonShape.new()
 	shape.set_faces(tmpMesh.get_faces())
-	$MeshInstance/StaticBody/CollisionShape.shape = shape
-	#$MeshInstance.create_trimesh_collision()
+	#$MeshInstance/StaticBody/CollisionShape.shape = shape
+	$MeshInstance.create_trimesh_collision()
 
 func createQuad(x,y):
 	var vert1 # vertex positions (Vector2)

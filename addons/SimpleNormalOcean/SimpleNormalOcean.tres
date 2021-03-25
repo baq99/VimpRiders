@@ -66,17 +66,17 @@ void fragment() {
 
 [resource]
 shader = SubResource( 1 )
-shader_param/albedo = Color( 0, 1, 1, 0.27451 )
+shader_param/albedo = Color( 0.231373, 0.827451, 0.827451, 1 )
 shader_param/transparent = 100.0
 shader_param/specular = 4.0
 shader_param/metallic = 0.8
-shader_param/roughness = 0.408
+shader_param/roughness = 0.173
 shader_param/point_size = 1.0
 shader_param/metallic_texture_channel = Plane( 1, 0, 0, 0 )
 shader_param/roughness_texture_channel = Plane( 1, 0, 0, 0 )
-shader_param/normal_1_time = Vector2( -0.14, 0.058 )
-shader_param/normal_2_time = Vector2( 0.015, -0.07 )
-shader_param/normal_3_time = Vector2( -0.07, 0.07 )
+shader_param/normal_1_time = Vector2( -0.01, 0.01 )
+shader_param/normal_2_time = Vector2( 0.015, -0.01 )
+shader_param/normal_3_time = Vector2( -0.01, 0.01 )
 shader_param/normal_scale = 0.923
 shader_param/uv1_scale = Vector3( 100, 100, 1 )
 shader_param/uv1_offset = Vector3( 0, 0, 0 )

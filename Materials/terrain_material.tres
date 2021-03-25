@@ -6,5 +6,5 @@
 flags_transparent = true
 params_specular_mode = 4
 params_use_alpha_scissor = true
-params_alpha_scissor_threshold = 0.68
+params_alpha_scissor_threshold = 0.3
 albedo_texture = ExtResource( 1 )

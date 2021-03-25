@@ -58,4 +58,7 @@ singletons=[ "res://addons/godot_ovrmobile/godot_ovrmobile.gdnlib" ]
 
 [rendering]
 
+quality/filters/msaa=1
+quality/depth/hdr=false
+quality/depth/hdr.mobile=true
 environment/default_environment="res://default_env.tres"
