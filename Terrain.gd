@@ -10,11 +10,15 @@ var vertices = PoolVector3Array()
 var UVs = PoolVector2Array()
 var normals = PoolVector3Array()
 
+var vertices2 = PoolVector3Array()
+var UVs2 = PoolVector2Array()
+var normals2 = PoolVector3Array()
+
 var tmpMesh = Mesh.new()
 
 #paths
 var p_heightmap = "res://Textures/Heightmaps/heightmap.png"
-var p_material = "res://Materials/terrain_material.tres"
+var p_material1 = "res://Materials/terrain_material.tres"
 
 func _ready():
 	var heightmap = load(p_heightmap).get_data()
@@ -35,8 +39,8 @@ func _ready():
 	
 	var st = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	st.set_material(load(p_material))
-	
+	st.set_material(load(p_material1))
+		
 	for v in vertices.size():
 		st.add_color(Color(1,1,1))
 		st.add_uv(UVs[v])
@@ -49,7 +53,7 @@ func _ready():
 	var shape = ConcavePolygonShape.new()
 	shape.set_faces(tmpMesh.get_faces())
 	#$MeshInstance/StaticBody/CollisionShape.shape = shape
-	$MeshInstance.create_trimesh_collision()
+	#$MeshInstance.create_trimesh_collision()
 
 func createQuad(x,y):
 	var vert1 # vertex positions (Vector2)

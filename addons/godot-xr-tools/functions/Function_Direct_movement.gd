@@ -18,8 +18,9 @@ export var step_turn_delay = 0.2
 export var step_turn_angle = 20.0
 
 # and movement
-export var max_speed = 5.0
+export var max_speed = 1.0
 export var drag_factor = 0.1
+
 
 # enum our buttons, should find a way to put this more central
 enum Buttons {
@@ -52,6 +53,8 @@ var origin_node = null
 var camera_node = null
 var velocity = Vector3(0.0, 0.0, 0.0)
 var gravity = -30.0
+var friction = 0.1
+var acceleration = 0.5
 onready var collision_shape: CollisionShape = get_node("KinematicBody/CollisionShape")
 onready var tail : RayCast = get_node("KinematicBody/Tail")
 
@@ -139,6 +142,8 @@ func _physics_process(delta):
 	collision_shape.shape.radius = player_radius
 	collision_shape.shape.height = player_height - (player_radius * 2.0)
 	collision_shape.transform.origin.y = (player_height / 2.0)
+	#There's something wrong with the tail collision.  
+	#Turning off tail collision allows me to move whilst turning it on and transforming it to any height fails to allow movement.
 	
 	# We should be the child or the controller on which the teleport is implemented
 	var controller = get_parent()
@@ -148,21 +153,23 @@ func _physics_process(delta):
 		
 		# if fly_action_button_id is pressed it activates the FLY MODE
 		# if fly_action_button_id is released it deactivates the FLY MODE
-		if controller.is_button_pressed(fly_activate_button_id) && canFly:
-			isflying =  true
-		else:
-			isflying = false
+		#if controller.is_button_pressed(fly_activate_button_id) && canFly:
+		#	isflying =  true
+		#else:
+		#	isflying = false
 		
 		# if player is flying, he moves following the controller's orientation
-		if isflying:	
-			if controller.is_button_pressed(fly_move_button_id):
-				# is flying, so we will use the controller's transform to move the VR capsule follow its orientation					
-				var curr_transform = $KinematicBody.global_transform
-				velocity = controller.global_transform.basis.z.normalized() * -delta * max_speed * ARVRServer.world_scale
-				velocity = $KinematicBody.move_and_slide(velocity)
-				var movement = ($KinematicBody.global_transform.origin - curr_transform.origin)
-				origin_node.global_transform.origin += movement
+		#if isflying:	
 		
+		if controller.is_button_pressed(fly_move_button_id):
+			# is flying, so we will use the controller's transform to move the VR capsule follow its orientation					
+			var curr_transform = $KinematicBody.global_transform
+			velocity = controller.global_transform.basis.z.normalized() * -delta * max_speed * ARVRServer.world_scale
+			velocity = $KinematicBody.move_and_slide(velocity)
+			var movement = ($KinematicBody.global_transform.origin - curr_transform.origin)
+			origin_node.global_transform.origin += movement
+			
+			
 		################################################################
 		# first process turning, no problems there :)
 		# move_type == MOVEMENT_TYPE.move_and_strafe
@@ -243,13 +250,13 @@ func _physics_process(delta):
 			velocity *= (1.0 - drag_factor)
 			
 			if move_type == MOVEMENT_TYPE.MOVE_AND_ROTATE:
-				if (abs(forwards_backwards) > 0.1 and tail.is_colliding()):
+				if (abs(forwards_backwards) > 0.1):#and tail.is_colliding()):
 					var dir = camera_transform.basis.z
 					dir.y = 0.0					
 					velocity = dir.normalized() * -forwards_backwards * delta * max_speed * ARVRServer.world_scale
 					#velocity = velocity.linear_interpolate(dir, delta * 100.0)		
 			elif move_type == MOVEMENT_TYPE.MOVE_AND_STRAFE:
-				if ((abs(forwards_backwards) > 0.1 ||  abs(left_right) > 0.1) and tail.is_colliding()):
+				if ((abs(forwards_backwards) > 0.1 ||  abs(left_right) > 0.1)):# and tail.is_colliding()):
 					var dir_forward = camera_transform.basis.z
 					dir_forward.y = 0.0				
 					# VR Capsule will strafe left and right
@@ -264,6 +271,17 @@ func _physics_process(delta):
 			gravity_velocity.y += gravity * delta
 			gravity_velocity = $KinematicBody.move_and_slide(gravity_velocity, Vector3(0.0, 1.0, 0.0))
 			velocity.y = gravity_velocity.y
+			
+			# attempt at momentum
+			#var momentum_velocity = Vector3(velocity.x, 0.0, velocity.z)
+			#velocity.x = 0.0
+			#velocity.z = 0.0
+			
+			#momentum_velocity.x += -gravity * delta
+			#momentum_velocity.z += -gravity * delta
+			#momentum_velocity = $KinematicBody.move_and_slide(momentum_velocity, Vector3(1.0, 0.0, 1.0))
+			#velocity.x = momentum_velocity.x
+			#velocity.z = momentum_velocity.z	
 			
 			# now use our new position to move our origin point
 			var movement = ($KinematicBody.global_transform.origin - curr_transform.origin)
